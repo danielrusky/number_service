@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Подтверждение{% endblock %}
+
+
+{% block content %}
+    <div class="block-verify">
+        <h3>Код подтверждения из SMS</h3>
+        <form action="" method="post">
+            <div class="form-group">
+                <input class="block-symbol" type="text" name="digit1" maxlength="1" required oninput="moveToNextInput(this, 'digit2')">
+                <input class="block-symbol" type="text" name="digit2" maxlength="1" required oninput="moveToNextInput(this, 'digit3')">
+                <input class="block-symbol" type="text" name="digit3" maxlength="1" required oninput="moveToNextInput(this, 'digit4')">
+                <input class="block-symbol" type="text" name="digit4" maxlength="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
+        </form>
+    </div>
+
+    <script>
+        function moveToNextInput(currentInput, nextInputName) {
+            if (currentInput.value.length === 1) {
+                const nextInput = document.getElementsByName(nextInputName)[0];
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+    </script>
+{% endblock %}

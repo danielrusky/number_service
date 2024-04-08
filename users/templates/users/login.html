@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+
+{% block content %}
+    <form class="login-form" action="{% url 'users:login' %}" method="post">
+        {% csrf_token %}
+        {% for f in form %}
+            <label for="{{ f.id_for_label }}"
+                   class="form-label">{{ f.label }}</label>
+            {% if f.id_for_label == 'id_phone' %}
+                <p>
+                    <input placeholder="+7 (XXX) XXX-XX-XX" type="text" name="phone" maxlength="20" class="form-control"
+                           required="" id="id_phone">
+                </p>
+            {% else %}
+                <p>{{ f }}</p>
+            {% endif %}
+            {{ f.errors }}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Войти -></button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const phoneInput = document.getElementById('id_phone');
+            phoneInput.addEventListener('input', function (event) {
+                let input = event.target.value;
+                input = input.replace(/\D/g, '');
+                if (input.length > 11) {
+                    input = input.slice(0, 11);
+                }
+                let formattedInput = '+7 (' + input.slice(1, 4) + ') ' + input.slice(4, 7) + '-' + input.slice(7, 9) + '-' + input.slice(9);
+                event.target.value = formattedInput;
+            });
+
+            phoneInput.addEventListener('paste', function (event) {
+                const clipboardData = event.clipboardData || window.clipboardData;
+                const pastedData = clipboardData.getData('Text');
+                if (!/^\d+$/.test(pastedData)) {
+                    event.preventDefault();
+                }
+            });
+
+            phoneInput.addEventListener('focus', function (event) {
+                if (event.target.value === '') {
+                    event.target.value = '+7 ';
+                }
+            });
+
+            phoneInput.addEventListener('blur', function (event) {
+                if (event.target.value === '+7 ') {
+                    event.target.value = '';
+                }
+            });
+
+            phoneInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Backspace') {
+                    let input = event.target.value;
+                    if (input[input.length - 1] === ' ') {
+                        event.target.value = input.slice(0, -2);
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

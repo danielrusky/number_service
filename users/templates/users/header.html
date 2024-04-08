@@ -1,0 +1,22 @@
+<header>
+    <div>
+        <a href="{% url 'users:home' %}">
+            <h1 class="link-header">Number Service</h1>
+        </a>
+    </div>
+    <div>
+        {% if request.user.is_authenticated %}
+            <div>
+                <a href="{% url 'users:logout' %}">
+                    <p class="link-header">Выйти</p>
+                </a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{% url 'users:login' %}">
+                    <p class="link-header">Войти</p>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</header>

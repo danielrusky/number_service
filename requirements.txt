@@ -1,0 +1,15 @@
+django==4.2.11
+psycopg2-binary==2.9.9
+psycopg2==2.9.9
+pillow==10.3.0
+djangorestframework==3.15.0
+django-filter==24.1
+python-dotenv==1.0.1
+coverage==7.4.4
+django-cors-headers==4.3.1
+django-celery-beat==2.6.0
+celery==5.3.6
+redis==5.1.0b4
+drf-yasg==1.21.7
+django-cors-headers==4.3.1
+crontab==1.0.1
