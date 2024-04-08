@@ -7,6 +7,7 @@
     <div class="block-verify">
         <h3>Код подтверждения из SMS</h3>
         <form action="" method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <input class="block-symbol" type="text" name="digit1" maxlength="1" required oninput="moveToNextInput(this, 'digit2')">
                 <input class="block-symbol" type="text" name="digit2" maxlength="1" required oninput="moveToNextInput(this, 'digit3')">
