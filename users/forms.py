@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import BooleanField
 
-from users.models import User
+from users.models import User, Code
 
 
 class FormStyleMixin:

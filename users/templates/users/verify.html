@@ -9,10 +9,10 @@
         <form action="" method="post">
             {% csrf_token %}
             <div class="form-group">
-                <input class="block-symbol" type="text" name="digit1" maxlength="1" required oninput="moveToNextInput(this, 'digit2')">
-                <input class="block-symbol" type="text" name="digit2" maxlength="1" required oninput="moveToNextInput(this, 'digit3')">
-                <input class="block-symbol" type="text" name="digit3" maxlength="1" required oninput="moveToNextInput(this, 'digit4')">
-                <input class="block-symbol" type="text" name="digit4" maxlength="1" required>
+                <input class="block-symbol" type="text" name="code" maxlength="1" required oninput="moveToNextInput(this, 'digit2')">
+                <input class="block-symbol" type="text" name="code" maxlength="1" required oninput="moveToNextInput(this, 'digit3')">
+                <input class="block-symbol" type="text" name="code" maxlength="1" required oninput="moveToNextInput(this, 'digit4')">
+                <input class="block-symbol" type="text" name="code" maxlength="1" required>
             </div>
             <button type="submit" class="btn btn-primary">Подтвердить</button>
         </form>

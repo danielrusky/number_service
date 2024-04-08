@@ -10,6 +10,8 @@ class User(AbstractUser):
     invite_code = models.CharField(max_length=6, unique=True, verbose_name='Инвайт код')
     referrals = models.ManyToManyField(
         'self',
+        null=True,
+        blank=True,
         verbose_name='Мои рефералы'
     )
     username = None
