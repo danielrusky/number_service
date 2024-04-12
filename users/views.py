@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import IntegrityError
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -9,7 +10,7 @@ from django.views import View
 from django.views.generic import CreateView, TemplateView
 
 from users.forms import AuthenticationForm
-from users.models import User, Code
+from users.models import User, Code, Referrals
 from users.tasks import send_verify_code_for_number
 from users.validators import generate_unique_invite_code
 
@@ -68,11 +69,21 @@ class UserVerifyView(TemplateView):
 class UserInviteCodeView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
+        if Referrals.objects.filter(user=request.user):
+            return HttpResponseBadRequest("Вы уже являетесь чьим-то рефералом!")
+
         invite_code = request.POST['invite_code']
         # Пользователь, инвайт код которого мы ввели
-        user = get_object_or_404(User, invite_code=invite_code)
-        if user.referrals.filter(id=request.user.id).exists():
-            return HttpResponseBadRequest("Вы уже являетесь рефералом этого пользователя.")
-        user.referrals.add(request.user)
-        return redirect('users:home')
+        author = get_object_or_404(User, invite_code=invite_code)
+        if author == request.user:
+            return HttpResponseBadRequest("Вы не можете подписаться на самого себя!")
 
+        try:
+            Referrals.objects.create(
+                user=request.user,
+                author=author
+            )
+        except IntegrityError:
+            return HttpResponseBadRequest("Вы уже являетесь рефералом этого пользователя!")
+
+        return redirect('users:home')

@@ -57,22 +57,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% if not request.user.referrals.all %}
+                {% if not request.user.referrals_author.all %}
                     <tr>
                         <th scope="row">-</th>
                         <td>-</td>
                     </tr>
                 {% endif %}
-                {% for referral in request.user.referrals.all %}
+                {% for referral in request.user.referrals_author.all %}
                     <tr>
                         <th scope="row">
-                            {% if  referral.first_name %}
-                                {{ referral.first_name }}
+                            {% if referral.user.first_name %}
+                                {{ referral.user.first_name }}
                             {% else %}
                                 -
                             {% endif %}
                         </th>
-                        <td>{{ referral.phone }}</td>
+                        <td>{{ referral.user.phone }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -8,12 +8,6 @@ class User(AbstractUser):
     """ Это модель пользователя """
     phone = models.CharField(max_length=20, unique=True, verbose_name='Телефон')
     invite_code = models.CharField(max_length=6, unique=True, verbose_name='Инвайт код')
-    referrals = models.ManyToManyField(
-        'self',
-        null=True,
-        blank=True,
-        verbose_name='Мои рефералы'
-    )
     username = None
 
     USERNAME_FIELD = 'phone'
@@ -68,6 +62,7 @@ class Referrals(models.Model):
 
     class Meta:
         db_table = 'referrals'
+        unique_together = ['user', 'author']
         ordering = ['-id']
         verbose_name = 'Реферал'
         verbose_name_plural = 'Рефералы'
