@@ -4,7 +4,11 @@ from users.models import User, Code, Referrals
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'id',
+        'phone'
+    )
+    search_fields = ("phone", )
 
 
 @admin.register(Code)
