@@ -4,64 +4,79 @@
 
 
 {% block content %}
-    <div class="container-info">
-        <h4>Информация: </h4>
-        <table class="table table-bordered user-info">
-            <thead>
-            <tr>
-                <th scope="col">Поле</th>
-                <th scope="col">Значение</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">Имя</th>
-                <td>{{ request.user.first_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Фамилия</th>
-                <td>{{ request.user.last_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Номер телефона</th>
-                <td colspan="2">{{ request.user.phone }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Код приглашения</th>
-                <td colspan="2">{{ request.user.invite_code }}</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <h4>Рефералы: </h4>
-        <table class="table table-bordered user-info">
-            <thead>
-            <tr>
-                <th scope="col">Имя</th>
-                <th scope="col">Номер телефона</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% if not request.user.referrals.all %}
+    {% if request.user.is_authenticated %}
+        <div class="container-info">
+            <h4>Информация: </h4>
+            <table class="table table-bordered user-info">
+                <thead>
                 <tr>
-                    <th scope="row">-</th>
-                    <td>-</td>
+                    <th scope="col">Поле</th>
+                    <th scope="col">Значение</th>
                 </tr>
-            {% endif %}
-            {% for referral in request.user.referrals.all %}
+                </thead>
+                <tbody>
                 <tr>
-                    <th scope="row">
-                        {% if  referral.first_name %}
-                            {{ referral.first_name }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </th>
-                    <td>{{ referral.phone }}</td>
+                    <th scope="row">Имя</th>
+                    <td>{{ request.user.first_name }}</td>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                <tr>
+                    <th scope="row">Фамилия</th>
+                    <td>{{ request.user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Номер телефона</th>
+                    <td colspan="2">{{ request.user.phone }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Код приглашения</th>
+                    <td colspan="2">{{ request.user.invite_code }}</td>
+                </tr>
+                </tbody>
+            </table>
 
-    </div>
+            <form class="invite-form" action="{% url 'users:invite_code' %}" method="post">
+                {% csrf_token %}
+                <h4>Введите код приглашения:</h4>
+                <div class="input-group mb-3">
+                    <input minlength="6" maxlength="6" style="margin: 0" type="text" class="form-control" placeholder="Код"
+                           aria-label="Recipient's username" aria-describedby="basic-addon2" name="invite_code">
+                    <div class="input-group-append">
+                        <button type="submit" class="input-group-text" id="basic-addon2">Отправить</button>
+                    </div>
+                </div>
+            </form>
+
+            <hr>
+
+            <h4>Рефералы: </h4>
+            <table class="table table-bordered user-info">
+                <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Номер телефона</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if not request.user.referrals.all %}
+                    <tr>
+                        <th scope="row">-</th>
+                        <td>-</td>
+                    </tr>
+                {% endif %}
+                {% for referral in request.user.referrals.all %}
+                    <tr>
+                        <th scope="row">
+                            {% if  referral.first_name %}
+                                {{ referral.first_name }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </th>
+                        <td>{{ referral.phone }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 {% endblock %}

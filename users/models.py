@@ -47,3 +47,27 @@ class Code(models.Model):
         ordering = ['-id']
         verbose_name = 'Код авторизации'
         verbose_name_plural = 'Коды авторизации'
+
+
+class Referrals(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='referrals_user',
+        verbose_name='Подписчик'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='referrals_author',
+        verbose_name='На кого подписался'
+    )
+
+    def __str__(self):
+        return f"{self.user} - {self.author}"
+
+    class Meta:
+        db_table = 'referrals'
+        ordering = ['-id']
+        verbose_name = 'Реферал'
+        verbose_name_plural = 'Рефералы'

@@ -1,8 +1,11 @@
 import os
 
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, TemplateView
 
 from users.forms import AuthenticationForm
@@ -60,3 +63,16 @@ class UserVerifyView(TemplateView):
 
         login(self.request, user)
         return redirect('users:home')
+
+
+class UserInviteCodeView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        invite_code = request.POST['invite_code']
+        # Пользователь, инвайт код которого мы ввели
+        user = get_object_or_404(User, invite_code=invite_code)
+        if user.referrals.filter(id=request.user.id).exists():
+            return HttpResponseBadRequest("Вы уже являетесь рефералом этого пользователя.")
+        user.referrals.add(request.user)
+        return redirect('users:home')
+
