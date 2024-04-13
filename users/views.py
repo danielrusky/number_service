@@ -1,6 +1,6 @@
 import os
 
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponseBadRequest
@@ -61,8 +61,7 @@ class UserVerifyView(TemplateView):
                 code="".join(request.POST.getlist('code'))
         ):
             return redirect('users:login_verify')
-
-        login(self.request, user)
+        login(request, user)
         return redirect('users:home')
 
 
