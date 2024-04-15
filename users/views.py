@@ -3,7 +3,7 @@ import os
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -62,7 +62,7 @@ class UserVerifyView(TemplateView):
         ):
             return redirect('users:login_verify')
         login(request, user)
-        return redirect('users:home')
+        return HttpResponseRedirect("/")
 
 
 class UserInviteCodeView(LoginRequiredMixin, View):
