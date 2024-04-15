@@ -121,3 +121,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+AUTHENTICATION_BACKENDS = [
+    'users.backend.PhoneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
