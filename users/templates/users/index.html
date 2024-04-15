@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Главная страницы{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            background-image: url({% static 'img/background.jpg' %});
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+{% endblock %}
 
 
 {% block content %}
@@ -38,7 +49,8 @@
                 {% csrf_token %}
                 <h4>Введите код приглашения:</h4>
                 <div class="input-group mb-3">
-                    <input minlength="6" maxlength="6" style="margin: 0" type="text" class="form-control" placeholder="Код"
+                    <input minlength="6" maxlength="6" style="margin: 0" type="text" class="form-control"
+                           placeholder="Код"
                            aria-label="Recipient's username" aria-describedby="basic-addon2" name="invite_code">
                     <div class="input-group-append">
                         <button type="submit" class="input-group-text" id="basic-addon2">Отправить</button>
