@@ -105,7 +105,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
-
+SESSION_COOKIE_SECURE = True
 LOGOUT_REDIRECT_URL = '/'
 
 CELERY_BROKER_URL = "redis://localhost:6379"
