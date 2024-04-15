@@ -62,7 +62,6 @@ class UserVerifyView(TemplateView):
         ):
             return redirect('users:login_verify')
         login(request, user, backend='users.backend.PhoneBackend')
-        r = authenticate(request, phone=user.phone)
         return redirect('users:home')
 
 
