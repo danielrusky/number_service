@@ -1,6 +1,6 @@
 import os
 
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
@@ -61,8 +61,12 @@ class UserVerifyView(TemplateView):
                 code="".join(request.POST.getlist('code'))
         ):
             return redirect('users:login_verify')
-        login(request, user)
-        return HttpResponseRedirect("/")
+        user = authenticate(request, user=user)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect("/")
+        else:
+            return redirect('users:login')
 
 
 class UserInviteCodeView(LoginRequiredMixin, View):
