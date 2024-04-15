@@ -1,6 +1,6 @@
 import os
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponseBadRequest
