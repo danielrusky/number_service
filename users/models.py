@@ -18,8 +18,8 @@ class User(AbstractUser):
         return self.phone
 
     class Meta:
-        db_table = 'users'
-        ordering = ['-id']
+        db_table = 'users'  # название таблицы в бд
+        ordering = ['-id']  # параметр сортировки по умолчанию
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
@@ -27,10 +27,10 @@ class User(AbstractUser):
 class Code(models.Model):
     """ ? """
     code = models.CharField(max_length=4, unique=True, verbose_name='Кода авторизации')
-    user = models.ForeignKey(
+    user = models.ForeignKey(  # создаю внешний ключ, который ссылается на таблицу юзер
         User,
         on_delete=models.CASCADE,
-        related_name='codes',
+        related_name='codes',  # связанное имя
         verbose_name='Пользователь'
     )
 
@@ -63,7 +63,9 @@ class Referrals(models.Model):
 
     class Meta:
         db_table = 'referrals'
-        unique_together = ['user', 'author']
+        unique_together = ['user', 'author']  # ограничение, которое не позволяет создать более одной записи
+        # с одинаковыми значениями этих полей
+
         ordering = ['-id']
         verbose_name = 'Реферал'
         verbose_name_plural = 'Рефералы'

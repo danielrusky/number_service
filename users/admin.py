@@ -2,13 +2,14 @@ from django.contrib import admin
 from users.models import User, Code, Referrals
 
 
+# регистрирую модели в административной панели
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'phone'
     )
-    search_fields = ("phone", )
+    search_fields = ("phone",)
 
 
 @admin.register(Code)

@@ -16,13 +16,13 @@ from users.validators import generate_unique_invite_code
 
 
 class HomePageView(TemplateView):
-    template_name = 'users/index.html'
+    template_name = 'users/index.html' # путь к шаблону
 
 
 class UserLoginView(CreateView):
-    form_class = AuthenticationForm
-    template_name = 'users/login.html'
-    success_url = reverse_lazy('users:login_verify')
+    form_class = AuthenticationForm #
+    template_name = 'users/login.html' #
+    success_url = reverse_lazy('users:login_verify') #
 
     def form_valid(self, form):
         if form.is_valid():
