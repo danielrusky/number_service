@@ -1,10 +1,11 @@
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import UserSerializer
-from api.services import UserLoginService, UserVerifyService
+from api.services import UserLoginService, UserVerifyService, UserInviteCodeService
 from users.models import User
 
 
@@ -34,6 +35,22 @@ class UserVerifyAPIView(APIView):
         UserVerifyService(
             phone=request.POST.get("phone"),
             code=request.POST.get("code"),
+        ).execute()
+        return Response(
+            {
+                'detail': 'OK'
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class UserInviteCodeAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        UserInviteCodeService(
+            user=request.user,
+            invite_code=request.POST.get("invite_code")
         ).execute()
         return Response(
             {

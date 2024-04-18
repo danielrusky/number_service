@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError, NotFound
 
 from users.tasks import send_verify_code_for_number
-from users.models import User, Code
+from users.models import User, Code, Referrals
 from users.validators import generate_unique_invite_code
 
 
@@ -102,3 +102,51 @@ class UserVerifyService:
         # возвращать токен в ответе
         Token.objects.get_or_create(user=user)
         code.delete()
+
+
+class UserInviteCodeService:
+
+    def __init__(self, user: User, invite_code: str):
+        self.__user = user
+        self.__invite_code = invite_code
+        self.validate()
+
+    def validate(self):
+        if not self.__invite_code:
+            raise ValidationError({
+                'error': 'Укажите код приглашения (invite_code)!'
+            })
+        if Referrals.objects.filter(user=self.__user):
+            return ValidationError({
+                "error": "Вы уже являетесь чьим-то рефералом!"
+            })
+        if self._author == self.__user:
+            return ValidationError({
+                "error": "Вы не можете подписаться на самого себя!"
+            })
+        if Referrals.objects.filter(
+                user=self.__user,
+                author=self._author
+        ):
+            raise ValidationError({
+                "error": "Вы уже являетесь рефералом этого пользователя!"
+            })
+
+    @property
+    @lru_cache
+    def _author(self):
+        try:
+            return User.objects.get(invite_code=self.__invite_code)
+        except User.DoesNotExist:
+            raise NotFound({
+                "error": "Такого пользователя не существует!"
+            })
+
+    def execute(self):
+        self.referral()
+
+    def referral(self):
+        Referrals.objects.create(
+            user=self.__user,
+            author=self._author
+        )
