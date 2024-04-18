@@ -23,7 +23,7 @@ class UserLoginAPIView(APIView):
         ).execute()
         return Response(
             {
-                'detail': 'OK'
+                'detail': 'Код отправлен на номер телефона.'
             },
             status=status.HTTP_200_OK
         )
@@ -32,13 +32,13 @@ class UserLoginAPIView(APIView):
 class UserVerifyAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
-        UserVerifyService(
+        result = UserVerifyService(
             phone=request.POST.get("phone"),
             code=request.POST.get("code"),
         ).execute()
         return Response(
             {
-                'detail': 'OK'
+                'token': result
             },
             status=status.HTTP_200_OK
         )
@@ -54,7 +54,7 @@ class UserInviteCodeAPIView(APIView):
         ).execute()
         return Response(
             {
-                'detail': 'OK'
+                'detail': 'Вы успешно подписались.'
             },
             status=status.HTTP_200_OK
         )

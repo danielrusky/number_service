@@ -70,7 +70,7 @@ class UserVerifyService:
             })
 
     def execute(self):
-        self.verify()
+        return self.verify()
 
     @property
     @lru_cache
@@ -99,9 +99,9 @@ class UserVerifyService:
         user = self._user
         user.is_active = True
         user.save()
-        # возвращать токен в ответе
-        Token.objects.get_or_create(user=user)
         code.delete()
+        token, _ = Token.objects.get_or_create(user=user)
+        return token
 
 
 class UserInviteCodeService:
@@ -117,11 +117,11 @@ class UserInviteCodeService:
                 'error': 'Укажите код приглашения (invite_code)!'
             })
         if Referrals.objects.filter(user=self.__user):
-            return ValidationError({
-                "error": "Вы уже являетесь чьим-то рефералом!"
+            raise ValidationError({
+                "error": "Вы уже являетесь рефералом этого пользователя!"
             })
         if self._author == self.__user:
-            return ValidationError({
+            raise ValidationError({
                 "error": "Вы не можете подписаться на самого себя!"
             })
         if Referrals.objects.filter(
