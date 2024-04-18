@@ -99,5 +99,6 @@ class UserVerifyService:
         user = self._user
         user.is_active = True
         user.save()
+        # возвращать токен в ответе
         Token.objects.get_or_create(user=user)
         code.delete()
