@@ -9,14 +9,17 @@ from api.services import UserLoginService, UserVerifyService, UserInviteCodeServ
 from users.models import User
 
 
+# этот класс, который отвечает за просмотр профиля определенного пользователя
 class UserProfileAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_url_kwarg = 'user_id'
 
 
+# этот класс, который отвечает за обработку логмина пользователя
 class UserLoginAPIView(APIView):
 
+    # метод отвечающий за обработку пост запроса
     def post(self, request, *args, **kwargs):
         UserLoginService(
             phone=request.POST.get("phone")
@@ -29,6 +32,7 @@ class UserLoginAPIView(APIView):
         )
 
 
+# этот код отвечает за верификацию пользователя
 class UserVerifyAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -44,9 +48,11 @@ class UserVerifyAPIView(APIView):
         )
 
 
+# класс, который отвечает за подписку на другого пользователя
 class UserInviteCodeAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    # метод отвечающий за обработку пост запроса
     def post(self, request, *args, **kwargs):
         UserInviteCodeService(
             user=request.user,

@@ -15,15 +15,18 @@ from users.tasks import send_verify_code_for_number
 from users.validators import generate_unique_invite_code
 
 
+# этот класс отвечает за обработку главной страницы
 class HomePageView(TemplateView):
-    template_name = 'users/index.html' # путь к шаблону
+    template_name = 'users/index.html'  # путь к шаблону
 
 
+# этот класс, который отвечает за отображение и валидацию страницы с вводом номера телефона
 class UserLoginView(CreateView):
-    form_class = AuthenticationForm #
-    template_name = 'users/login.html' #
-    success_url = reverse_lazy('users:login_verify') #
+    form_class = AuthenticationForm  #
+    template_name = 'users/login.html'  #
+    success_url = reverse_lazy('users:login_verify')  #
 
+    # метод валидации формы
     def form_valid(self, form):
         if form.is_valid():
             user = User.objects.filter(phone=form.cleaned_data['phone']).first()
@@ -46,9 +49,11 @@ class UserLoginView(CreateView):
         return redirect(self.success_url)
 
 
+# этот код отвечает за отображение и валидацию страницы с подтверждением номера телефона
 class UserVerifyView(TemplateView):
     template_name = 'users/verify.html'
 
+    # метод отвечающий за обработку пост запроса
     def post(self, request, *args, **kwargs):
         user_id = self.request.session.get('user_id')
         try:
@@ -65,12 +70,15 @@ class UserVerifyView(TemplateView):
         return redirect('users:home')
 
 
+# класс, который отвечает за обработку кода приглашения введенного пользователя
 class UserInviteCodeView(LoginRequiredMixin, View):
 
+    # метод отвечающий за обработку пост запроса
     def post(self, request, *args, **kwargs):
         if Referrals.objects.filter(user=request.user):
             return HttpResponseBadRequest("Вы уже являетесь чьим-то рефералом!")
 
+        # создаем переменную invite_code, которая равна значению из запроса
         invite_code = request.POST['invite_code']
         # Пользователь, инвайт код которого мы ввели
         author = get_object_or_404(User, invite_code=invite_code)

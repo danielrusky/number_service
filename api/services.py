@@ -9,22 +9,27 @@ from users.models import User, Code, Referrals
 from users.validators import generate_unique_invite_code
 
 
+# сервис для логина пользователя и для отправки кода подтверждения
 class UserLoginService:
 
+    # определение локальных свойств для класса
     def __init__(self, phone=None):
         self.__phone = phone
         self.validate()
 
+    # валидация данных
     def validate(self):
         if not self.__phone:
             raise ValidationError({
                 'error': 'Укажите номер телефона (phone)!'
             })
 
+    # метод для запуска класса
     def execute(self):
         self.login()
         self.send_mail()
 
+    # позволяет обращться к функции, как к свойству класса
     @property
     def _user(self):
         try:
@@ -32,6 +37,7 @@ class UserLoginService:
         except User.DoesNotExist:
             return None
 
+    # функция, которая отвечает за создания пользователя, если его нет
     def login(self):
         user = self._user
         if user:
@@ -42,6 +48,7 @@ class UserLoginService:
             is_active=False
         )
 
+    # функция, которая отправляет код верификации
     def send_mail(self):
         send_verify_code_for_number.apply_async(
             (self._user.id,),
@@ -52,6 +59,7 @@ class UserLoginService:
         )
 
 
+# сервис для верификации пользователя
 class UserVerifyService:
 
     def __init__(self, phone=None, code=None):
@@ -104,6 +112,7 @@ class UserVerifyService:
         return token
 
 
+# сервис для подписки на другого пользователя
 class UserInviteCodeService:
 
     def __init__(self, user: User, invite_code: str):
@@ -133,7 +142,7 @@ class UserInviteCodeService:
             })
 
     @property
-    @lru_cache
+    @lru_cache # кэширует результат выполняемой функции
     def _author(self):
         try:
             return User.objects.get(invite_code=self.__invite_code)

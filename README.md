@@ -24,11 +24,15 @@
 
 ### Инструкции по установке:
 
-1. Создайте файл .env на основе переменных из файла .env_example.
-2. Выполните python manage.py migrate в терминале для применения миграций.
-3. Запустите Redis.
-4. Запустите Celery командой celery -A config worker -l info.
-5. Запустите сервер с помощью команды python manage.py runserver.
+1. Склонируйте репозиторий: git clone https://github.com/danielrusky/number_service
+2. Установка зависимостей. Перейдите в каталог вашего проекта и установите необходимые 
+зависимости, указанные в файле requirements.txt: cd referal_my pip install -r requirements.txt
+3. Создайте файл .env на основе переменных из файла .env_example.
+3. Выполните python manage.py migrate в терминале для применения миграций.
+4. Для создания суперпользоваетля используйте команду python manage.py csu
+4. Запустите Redis.
+5. Запустите Celery командой celery -A config worker -l info.
+6. Запустите сервер с помощью команды python manage.py runserver.
 
 ### Автор:
 

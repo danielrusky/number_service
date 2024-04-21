@@ -4,6 +4,7 @@ from users.models import User
 from utils.generate_string import generate_string
 
 
+# функция генерирует уникальный код приглашения
 def generate_unique_invite_code(length):
     for i in range(10):
         invite_code = generate_string(length)
